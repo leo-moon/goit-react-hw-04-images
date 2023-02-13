@@ -8,8 +8,8 @@ const instance = axios.create({
   },
 });
 
-export const searchNewImages = async (search = '', per_page = 3, page = 1) => {
-  console.log('searchImages', search);
+export const searchNewImages = async (search = '', page = 1, per_page=6) => {
+  console.log('searchImages7777', search, 'page', page);
   const data = await instance.get('', {
     params: {
       q: search,

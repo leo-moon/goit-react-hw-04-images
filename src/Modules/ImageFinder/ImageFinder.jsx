@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, useState, useEffect } from 'react';
 // import axios from 'axios';
 
 import Modal from 'shared/components/Modal/Modal';
@@ -12,6 +12,99 @@ import Loader from './Loader/Loader';
 
 import './image-finder.module.scss';
 
+const ImageFinder = () => {
+  const [search, setSearch] = useState('');
+  const [items, setItems] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [imageBig, setImageBig] = useState(null);
+  const [total, setTotal] = useState(0);
+  const per_page = 12;
+
+  useEffect(
+    prevSearch => {
+      // if (search !== prevSearch || page !== prevPage) {
+      if (search !== prevSearch) {
+        const fetchImages = async () => {
+          try {
+            setLoading(true);
+            console.log(page, 'page effect');
+            const { data } = await searchNewImages(search, page, per_page);
+            setItems([...items, ...data.hits]);
+            console.log('88888', items);
+            setTotal(data.totalHits);
+          } catch (error) {
+            setError(error.message);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchImages();
+      }
+    },
+    [search, page]
+  );
+
+  const searchImages = ({ search }) => {
+    console.log('searchImages', search);
+    setSearch(search);
+    setItems([]);
+    setPage(1);
+  };
+
+  const changePage = () => {
+    setPage(page + 1);
+  };
+
+  const showLoadButton = () => {
+    console.log(
+      '77777777777777',
+      total,
+      page,
+      per_page,
+      total <= page * per_page
+    );
+    if (total <= page * per_page) {
+      return false;
+    }
+    return true;
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setImageBig(null);
+  };
+
+  const showBigImage = ({ largeImageURL }) => {
+    setImageBig(largeImageURL);
+    setShowModal(true);
+  };
+
+  return (
+    <>
+      <Searchbar onSubmit={searchImages} />
+      {error && <p>Something goes wrong</p>}
+
+      {loading && <Loader />}
+      {!loading && <ImageGallery items={items} showBigImage={showBigImage} />}
+
+      {!loading && showLoadButton() && (
+        <Button changePage={changePage}></Button>
+      )}
+      {showModal && (
+        <Modal close={closeModal}>
+          <ImageBig imageBig={imageBig} />
+        </Modal>
+      )}
+    </>
+  );
+};
+
+export default ImageFinder;
+
+/*
 class ImageFinder extends Component {
   state = {
     items: [],
@@ -130,3 +223,4 @@ class ImageFinder extends Component {
 }
 
 export default ImageFinder; //
+*/
