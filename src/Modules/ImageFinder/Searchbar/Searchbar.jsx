@@ -1,7 +1,7 @@
 // import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import initState from './initState';
+// import initState from './initState';
 
 import styles from './searchbar.module.scss';
 
@@ -12,11 +12,11 @@ const Searchbar = ({ onSubmit }) => {
     e.preventDefault();
     onSubmit({ ...search });
     // setSearch({ ...initState });
-    setSearch( '');
+    setSearch('');
   };
 
   const handleChange = ({ target }) => {
-    const { name, value } = target;
+    const { name } = target;
     setSearch({ ...search, [name]: target.value }); //   ?
     // console.log(target,'handleChange', search, 'name', [name], 'v', value);
   };

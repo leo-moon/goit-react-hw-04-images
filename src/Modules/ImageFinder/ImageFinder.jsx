@@ -1,4 +1,4 @@
-import { Component, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 // import axios from 'axios';
 
 import Modal from 'shared/components/Modal/Modal';
@@ -6,7 +6,7 @@ import ImageBig from './ImageBig/ImageBig';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import { searchNewImages } from '../../shared/services/image-api';
-import { startImages } from '../../shared/services/image-api';
+// import { startImages } from '../../shared/services/image-api';
 import Button from './ButtonLoad/ButtonLoad';
 import Loader from './Loader/Loader';
 
@@ -23,29 +23,24 @@ const ImageFinder = () => {
   const [total, setTotal] = useState(0);
   const per_page = 12;
 
-  useEffect(
-    prevSearch => {
-      // if (search !== prevSearch || page !== prevPage) {
-      if (search !== prevSearch) {
-        const fetchImages = async () => {
-          try {
-            setLoading(true);
-            console.log(page, 'page effect');
-            const { data } = await searchNewImages(search, page, per_page);
-            setItems([...items, ...data.hits]);
-            console.log('88888', items);
-            setTotal(data.totalHits);
-          } catch (error) {
-            setError(error.message);
-          } finally {
-            setLoading(false);
-          }
-        };
-        fetchImages();
-      }
-    },
-    [search, page]
-  );
+  useEffect(() => {
+    if (search) {
+      const fetchImages = async () => {
+        try {
+          setLoading(true);
+          // console.log(page, 'page effect');
+          const { data } = await searchNewImages(search, page, per_page);
+          setItems(prevItems => [...prevItems, ...data.hits]);
+          setTotal(data.totalHits);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchImages();
+    }
+  }, [search, page]);
 
   const searchImages = ({ search }) => {
     console.log('searchImages', search);
