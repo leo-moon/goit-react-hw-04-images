@@ -5,7 +5,7 @@ import styles from './modal.module.scss';
 
 const modalAbove = document.querySelector('#modal-root');
 
-const Modal = ({ children, close }) => {
+const Modal = ({ close, children }) => {
   const closeModal = ({ target, currentTarget, code }) => {
     console.log('target', target);
     console.log('currentTarget', currentTarget);
@@ -14,12 +14,12 @@ const Modal = ({ children, close }) => {
       close();
     }
   };
-  
+
   useEffect(() => {
     document.addEventListener('keydown', closeModal);
 
     return () => document.removeEventListener('keydown', closeModal);
-  }, []);
+  });
 
   return createPortal(
     <div className={styles.overlay} onClick={closeModal}>

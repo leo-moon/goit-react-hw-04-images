@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-// import axios from 'axios';
 
 import Modal from 'shared/components/Modal/Modal';
 import ImageBig from './ImageBig/ImageBig';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import { searchNewImages } from '../../shared/services/image-api';
-// import { startImages } from '../../shared/services/image-api';
 import Button from './ButtonLoad/ButtonLoad';
 import Loader from './Loader/Loader';
 
@@ -28,7 +26,6 @@ const ImageFinder = () => {
       const fetchImages = async () => {
         try {
           setLoading(true);
-          // console.log(page, 'page effect');
           const { data } = await searchNewImages(search, page, per_page);
           setItems(prevItems => [...prevItems, ...data.hits]);
           setTotal(data.totalHits);
@@ -43,7 +40,6 @@ const ImageFinder = () => {
   }, [search, page]);
 
   const searchImages = ({ search }) => {
-    console.log('searchImages', search);
     setSearch(search);
     setItems([]);
     setPage(1);
@@ -54,13 +50,6 @@ const ImageFinder = () => {
   };
 
   const showLoadButton = () => {
-    console.log(
-      '77777777777777',
-      total,
-      page,
-      per_page,
-      total <= page * per_page
-    );
     if (total <= page * per_page) {
       return false;
     }

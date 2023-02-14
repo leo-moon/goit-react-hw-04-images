@@ -1,4 +1,3 @@
-// import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 // import initState from './initState';
@@ -18,10 +17,8 @@ const Searchbar = ({ onSubmit }) => {
   const handleChange = ({ target }) => {
     const { name } = target;
     setSearch({ ...search, [name]: target.value }); //   ?
-    // console.log(target,'handleChange', search, 'name', [name], 'v', value);
   };
 
-  // const { search } = state;
   return (
     <header className={styles.searchbar}>
       <form className={styles.form} onSubmit={handleSubmit}>
