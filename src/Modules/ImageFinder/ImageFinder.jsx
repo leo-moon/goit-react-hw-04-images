@@ -4,6 +4,7 @@ import Modal from 'shared/components/Modal/Modal';
 import ImageBig from './ImageBig/ImageBig';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
+import { startImages } from '../../shared/services/image-api';
 import { searchNewImages } from '../../shared/services/image-api';
 import Button from './ButtonLoad/ButtonLoad';
 import Loader from './Loader/Loader';
@@ -12,7 +13,7 @@ import './image-finder.module.scss';
 
 const ImageFinder = () => {
   const [search, setSearch] = useState('');
-  const [items, setItems] = useState([]);
+
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -20,6 +21,22 @@ const ImageFinder = () => {
   const [imageBig, setImageBig] = useState(null);
   const [total, setTotal] = useState(0);
   const per_page = 12;
+  const [items, setItems] = useState(() => {
+    const fetchImagesStart = async () => {
+      try {
+        setLoading(true);
+        const { data } = await startImages(per_page);
+        const dataHits = [...data.hits] ? [...data.hits] : [];
+        setTotal(data.totalHits);
+        setItems([...dataHits]);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchImagesStart();
+  });
 
   useEffect(() => {
     if (search) {
@@ -43,7 +60,7 @@ const ImageFinder = () => {
     setSearch(search);
     setItems([]);
     setPage(1);
-  },[])
+  }, []);
 
   const changePage = () => {
     setPage(page + 1);
@@ -64,7 +81,7 @@ const ImageFinder = () => {
   const showBigImage = useCallback(({ largeImageURL }) => {
     setImageBig(largeImageURL);
     setShowModal(true);
-  },[])
+  }, []);
 
   return (
     <>
