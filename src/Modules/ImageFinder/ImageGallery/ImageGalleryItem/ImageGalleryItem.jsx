@@ -1,3 +1,5 @@
+import {memo} from 'react'
+
 import styles from './image-gallery-item.module.scss';
 
 const ImageGalleryItem = ({ items, showBigImage }) => {
@@ -15,7 +17,7 @@ const ImageGalleryItem = ({ items, showBigImage }) => {
   }
 };
 
-export default ImageGalleryItem;
+export default memo(ImageGalleryItem);
 
 ImageGalleryItem.defaultProps = {
   items: [],

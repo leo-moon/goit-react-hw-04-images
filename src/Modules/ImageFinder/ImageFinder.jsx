@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Modal from 'shared/components/Modal/Modal';
 import ImageBig from './ImageBig/ImageBig';
@@ -39,11 +39,11 @@ const ImageFinder = () => {
     }
   }, [search, page]);
 
-  const searchImages = ({ search }) => {
+  const searchImages = useCallback(({ search }) => {
     setSearch(search);
     setItems([]);
     setPage(1);
-  };
+  },[])
 
   const changePage = () => {
     setPage(page + 1);
@@ -61,10 +61,10 @@ const ImageFinder = () => {
     setImageBig(null);
   };
 
-  const showBigImage = ({ largeImageURL }) => {
+  const showBigImage = useCallback(({ largeImageURL }) => {
     setImageBig(largeImageURL);
     setShowModal(true);
-  };
+  },[])
 
   return (
     <>
